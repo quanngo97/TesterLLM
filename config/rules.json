@@ -1,0 +1,137 @@
+{
+  "_comment": "Per-extension heuristics injected into reviewer agent prompts to focus attention on language-specific failure modes.",
+  "defaults": {
+    "max_diff_chars": 60000,
+    "ignore_paths": [
+      "**/*.lock",
+      "**/*.min.js",
+      "**/dist/**",
+      "**/build/**",
+      "**/node_modules/**",
+      "**/vendor/**",
+      "**/*.generated.*",
+      "**/*.pb.go"
+    ]
+  },
+  "extensions": {
+    ".swift": {
+      "language": "Swift",
+      "focus": [
+        "Missing [weak self] / [unowned self] in escaping closures causing retain cycles",
+        "Force unwraps (!) on optionals from network/user input",
+        "Unstructured Task {} leaking outside view lifecycle",
+        "@MainActor violations and UI updates off the main thread",
+        "Delegate properties not declared weak"
+      ]
+    },
+    ".kt": {
+      "language": "Kotlin",
+      "focus": [
+        "Unscoped coroutines (GlobalScope) outside lifecycle-aware scopes",
+        "Missing structured concurrency / Job cancellation handling",
+        "!! non-null assertions on nullable platform types",
+        "Mutable shared state accessed without synchronization",
+        "Context leaks via inner classes holding Activity/Context references"
+      ]
+    },
+    ".java": {
+      "language": "Java",
+      "focus": [
+        "Unsynchronized access to shared mutable state",
+        "Resource leaks: unclosed Streams/Connections not in try-with-resources",
+        "NullPointerException risk on unchecked return values",
+        "Thread pool misuse / unbounded executor growth"
+      ]
+    },
+    ".ts": {
+      "language": "TypeScript",
+      "focus": [
+        "Unhandled Promise rejections / missing await",
+        "any-typed escape hatches bypassing null checks",
+        "Unbounded Promise.all without error isolation",
+        "Event listeners added without corresponding cleanup (memory leak)",
+        "Missing optional chaining on potentially undefined API responses"
+      ]
+    },
+    ".tsx": {
+      "language": "TypeScript/React",
+      "focus": [
+        "useEffect missing cleanup for subscriptions/timers",
+        "Stale closures over state in async callbacks",
+        "Missing dependency array entries causing stale reads",
+        "Unhandled fetch/network error paths in data hooks"
+      ]
+    },
+    ".js": {
+      "language": "JavaScript",
+      "focus": [
+        "Unhandled Promise rejections / missing try-catch around await",
+        "Event emitter listeners never removed (leak)",
+        "Callback-based race conditions on shared variables",
+        "Loose equality / implicit type coercion bugs"
+      ]
+    },
+    ".py": {
+      "language": "Python",
+      "focus": [
+        "Mutable default arguments",
+        "asyncio tasks created without reference retention (garbage collected mid-flight)",
+        "Bare except: swallowing errors silently",
+        "Unclosed file handles / sockets not using context managers",
+        "SQL/command string formatting instead of parameterized queries"
+      ]
+    },
+    ".go": {
+      "language": "Go",
+      "focus": [
+        "Goroutine leaks: goroutines without cancellation via context",
+        "Unclosed io.ReadCloser / response bodies",
+        "Data races on shared maps/slices without mutex",
+        "Ignored error return values",
+        "Nil pointer dereference on unchecked map/interface lookups"
+      ]
+    },
+    ".rs": {
+      "language": "Rust",
+      "focus": [
+        "unwrap()/expect() on Result/Option from fallible I/O or parsing",
+        "Unsafe blocks introducing undefined behavior",
+        "Deadlocks from nested Mutex locks",
+        "Panics in async tasks silently dropping futures"
+      ]
+    },
+    ".rb": {
+      "language": "Ruby",
+      "focus": [
+        "Unrescued exceptions in request paths",
+        "N+1 queries introduced in ActiveRecord associations",
+        "Thread-unsafe class-level mutable state",
+        "Mass assignment without strong parameters"
+      ]
+    },
+    ".sql": {
+      "language": "SQL",
+      "focus": [
+        "Missing transaction boundaries on multi-statement writes",
+        "Unindexed columns used in new WHERE/JOIN clauses",
+        "Destructive migrations without reversible down-path"
+      ]
+    },
+    ".yml": {
+      "language": "YAML/CI",
+      "focus": [
+        "Secrets echoed to logs or passed via unmasked plaintext",
+        "Overly broad permissions blocks",
+        "Unpinned third-party action versions (supply chain risk)"
+      ]
+    },
+    ".yaml": {
+      "language": "YAML/CI",
+      "focus": [
+        "Secrets echoed to logs or passed via unmasked plaintext",
+        "Overly broad permissions blocks",
+        "Unpinned third-party action versions (supply chain risk)"
+      ]
+    }
+  }
+}
